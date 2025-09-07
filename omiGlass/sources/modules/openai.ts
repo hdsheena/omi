@@ -1,7 +1,6 @@
 import axios from "axios";
-import * as RNFS from "react-native-fs";
-import Sound = require("react-native-sound");
-
+import * as FileSystem from "expo-file-system";
+import { Audio } from "expo-av";
 import { keys } from "../keys";
 
 /**
@@ -9,7 +8,9 @@ import { keys } from "../keys";
  */
 export async function transcribeAudio(audioPath: string) {
   try {
-    const audioBase64 = await RNFS.readFile(audioPath, "base64");
+    const audioBase64 = await FileSystem.readAsStringAsync(audioPath, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
 
     const response = await axios.post(
       "https://api.openai.com/v1/audio/transcriptions",
@@ -33,8 +34,9 @@ export async function transcribeAudio(audioPath: string) {
  * Convert image to Base64
  */
 async function imageToBase64(path: string) {
-  const image = await RNFS.readFile(path, "base64");
-  return `data:image/jpeg;base64,${image}`;
+  return await FileSystem.readAsStringAsync(path, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
 }
 
 /**
@@ -42,7 +44,8 @@ async function imageToBase64(path: string) {
  */
 export async function describeImage(imagePath: string) {
   try {
-    const imageBase64 = await imageToBase64(imagePath);
+    const base64Data = await imageToBase64(imagePath);
+    const imageBase64 = `data:image/jpeg;base64,${base64Data}`;
 
     const response = await axios.post(
       "https://api.openai.com/v1/images/descriptions",
@@ -83,33 +86,20 @@ export async function textToSpeech(text: string) {
       }
     );
 
-    // Save audio file to temp path
-    const path = `${RNFS.CachesDirectoryPath}/tts_output.mp3`;
     // Convert arraybuffer -> base64 string
-    const base64Audio = Buffer.from(response.data, "binary").toString("base64");
+    const base64Audio = Buffer.from(response.data).toString("base64");
 
-    // Save audio file as base64
-    await RNFS.writeFile(path, base64Audio, "base64");
-
-    // Play with react-native-sound
-    return new Promise((resolve, reject) => {
-      const sound = new Sound(path, "", (err) => {
-        if (err) {
-          console.error("Error loading TTS audio:", err);
-          reject(err);
-          return;
-        }
-        sound.play((success) => {
-          if (!success) {
-            console.error("Playback failed due to audio decoding errors");
-            reject(new Error("Playback failed"));
-          } else {
-            resolve(path);
-          }
-          sound.release();
-        });
-      });
+    // Save audio file
+    const path = `${FileSystem.cacheDirectory}tts_output.mp3`;
+    await FileSystem.writeAsStringAsync(path, base64Audio, {
+      encoding: FileSystem.EncodingType.Base64,
     });
+
+    // Load & play audio
+    const { sound } = await Audio.Sound.createAsync({ uri: path });
+    await sound.playAsync();
+
+    return path;
   } catch (error) {
     console.error("Error in textToSpeech:", error);
     return null;
