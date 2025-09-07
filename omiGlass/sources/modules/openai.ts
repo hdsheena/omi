@@ -1,124 +1,172 @@
 import axios from "axios";
-import fs from "fs";
+import * as RNFS from "react-native-fs";
+import Sound = require("react-native-sound");
+
 import { keys } from "../keys";
 
+/**
+ * Transcribe audio file
+ */
 export async function transcribeAudio(audioPath: string) {
-    const audioBase64 = fs.readFileSync(audioPath, { encoding: 'base64' });
-    try {
-        const response = await axios.post("https://api.openai.com/v1/audio/transcriptions", {
-            audio: audioBase64,
-        }, {
-            headers: {
-                'Authorization': `Bearer ${keys.openai}`,  // Replace YOUR_API_KEY with your actual OpenAI API key
-                'Content-Type': 'application/json'
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error in transcribeAudio:", error);
-        return null; // or handle error differently
-    }
+  try {
+    const audioBase64 = await RNFS.readFile(audioPath, "base64");
+
+    const response = await axios.post(
+      "https://api.openai.com/v1/audio/transcriptions",
+      { audio: audioBase64 },
+      {
+        headers: {
+          Authorization: `Bearer ${keys.openai}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in transcribeAudio:", error);
+    return null;
+  }
 }
 
-let audioContext: AudioContext;
-
-export async function startAudio() {
-    audioContext = new AudioContext();
+/**
+ * Convert image to Base64
+ */
+async function imageToBase64(path: string) {
+  const image = await RNFS.readFile(path, "base64");
+  return `data:image/jpeg;base64,${image}`;
 }
 
-export async function textToSpeech(text: string) {
-    try {
-        const response = await axios.post("https://api.openai.com/v1/audio/speech", {
-            input: text,    // Use 'input' instead of 'text'
-            voice: "nova",
-            model: "tts-1",
-        }, {
-            headers: {
-                'Authorization': `Bearer ${keys.openai}`,  // Replace YOUR_API_KEY with your actual OpenAI API key
-                'Content-Type': 'application/json'
-            },
-            responseType: 'arraybuffer'  // This will handle the binary data correctly
-        });
-
-
-        // Decode the audio data asynchronously
-        const audioBuffer = await audioContext.decodeAudioData(response.data);
-
-        // Create an audio source
-        const source = audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(audioContext.destination);
-        source.start();  // Play the audio immediately
-
-        return response.data;
-    } catch (error) {
-        console.error("Error in textToSpeech:", error);
-        return null; // or handle error differently
-    }
-}
-
-// Function to convert image to base64
-function imageToBase64(path: string) {
-    const image = fs.readFileSync(path, { encoding: 'base64' });
-    return `data:image/jpeg;base64,${image}`; // Adjust the MIME type if necessary (e.g., image/png)
-}
-
+/**
+ * Describe an image using OpenAI
+ */
 export async function describeImage(imagePath: string) {
-    const imageBase64 = imageToBase64(imagePath);
-    try {
-        const response = await axios.post("https://api.openai.com/v1/images/descriptions", {
-            image: imageBase64,
-        }, {
-            headers: {
-                'Authorization': `Bearer ${keys.openai}`,  // Replace YOUR_API_KEY with your actual OpenAI API key
-                'Content-Type': 'application/json'
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error in describeImage:", error);
-        return null; // or handle error differently
-    }
+  try {
+    const imageBase64 = await imageToBase64(imagePath);
+
+    const response = await axios.post(
+      "https://api.openai.com/v1/images/descriptions",
+      { image: imageBase64 },
+      {
+        headers: {
+          Authorization: `Bearer ${keys.openai}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error in describeImage:", error);
+    return null;
+  }
 }
 
+/**
+ * Text-to-Speech: generate audio + play it
+ */
+export async function textToSpeech(text: string) {
+  try {
+    const response = await axios.post(
+      "https://api.openai.com/v1/audio/speech",
+      {
+        input: text,
+        voice: "nova",
+        model: "tts-1",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${keys.openai}`,
+          "Content-Type": "application/json",
+        },
+        responseType: "arraybuffer",
+      }
+    );
+
+    // Save audio file to temp path
+    const path = `${RNFS.CachesDirectoryPath}/tts_output.mp3`;
+    // Convert arraybuffer -> base64 string
+    const base64Audio = Buffer.from(response.data, "binary").toString("base64");
+
+    // Save audio file as base64
+    await RNFS.writeFile(path, base64Audio, "base64");
+
+    // Play with react-native-sound
+    return new Promise((resolve, reject) => {
+      const sound = new Sound(path, "", (err) => {
+        if (err) {
+          console.error("Error loading TTS audio:", err);
+          reject(err);
+          return;
+        }
+        sound.play((success) => {
+          if (!success) {
+            console.error("Playback failed due to audio decoding errors");
+            reject(new Error("Playback failed"));
+          } else {
+            resolve(path);
+          }
+          sound.release();
+        });
+      });
+    });
+  } catch (error) {
+    console.error("Error in textToSpeech:", error);
+    return null;
+  }
+}
+
+/**
+ * GPT chat request
+ */
 export async function gptRequest(systemPrompt: string, userPrompt: string) {
-    try {
-        const response = await axios.post("https://api.openai.com/v1/chat/completions", {
-            model: "gpt-4o",
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: userPrompt },
-            ],
-        }, {
-            headers: {
-                'Authorization': `Bearer ${keys.openai}`,  // Replace YOUR_API_KEY with your actual OpenAI API key
-                'Content-Type': 'application/json'
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error in gptRequest:", error);
-        return null; // or handle error differently
-    }
+  try {
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-4o",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${keys.openai}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error in gptRequest:", error);
+    return null;
+  }
 }
 
+/**
+ * Example usage
+ */
+(async () => {
+  await textToSpeech("Hello I am an agent");
 
-textToSpeech("Hello I am an agent")
-console.info(gptRequest(
-    `
-                You are a smart AI that need to read through description of a images and answer user's questions.
+  console.info(
+    await gptRequest(
+      `
+      You are a smart AI that needs to read through image descriptions 
+      and answer the user's questions.
 
-                This are the provided images:
-                The image features a woman standing in an open space with a metal roof, possibly at a train station or another large building.
-                She is wearing a hat and appears to be looking up towards the sky.
-                The scene captures her attention as she gazes upwards, perhaps admiring something above her or simply enjoying the view from this elevated position.
+      These are the provided images:
+      The image features a woman standing in an open space with a metal roof, 
+      possibly at a train station or another large building. 
+      She is wearing a hat and appears to be looking up towards the sky. 
+      The scene captures her attention as she gazes upwards.
 
-                DO NOT mention the images, scenes or descriptions in your answer, just answer the question.
-                DO NOT try to generalize or provide possible scenarios.
-                ONLY use the information in the description of the images to answer the question.
-                BE concise and specific.
-            `
-        ,
-            'where is the person?'
-
-))
+      DO NOT mention the images, scenes, or descriptions in your answer. 
+      ONLY use the information in the description of the images. 
+      BE concise and specific.
+      `,
+      "where is the person?"
+    )
+  );
+})();
