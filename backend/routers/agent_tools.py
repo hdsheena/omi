@@ -11,7 +11,6 @@ Endpoints:
 
 import asyncio
 import logging
-from datetime import datetime, timezone
 
 import google.auth
 import google.auth.transport.requests

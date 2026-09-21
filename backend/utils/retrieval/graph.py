@@ -17,7 +17,6 @@ if TYPE_CHECKING:
 
 from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 
-import database.notifications as notification_db
 from models.app import App
 from models.chat import ChatSession, Message, PageContext
 from utils.llm.chat import retrieve_is_file_question

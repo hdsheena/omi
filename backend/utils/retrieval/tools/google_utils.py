@@ -5,7 +5,6 @@ Shared utilities for Google OAuth integrations (Calendar, Gmail, etc.).
 import os
 from typing import Optional
 
-import httpx
 
 import database.users as users_db
 from utils.http_client import get_auth_client

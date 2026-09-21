@@ -10,7 +10,7 @@ import uuid
 import asyncio
 import contextvars
 import traceback
-from typing import List, Optional, AsyncGenerator, Any, Tuple
+from typing import List, Optional, AsyncGenerator, Any
 
 from langchain_core.runnables import RunnableConfig
 
@@ -49,8 +49,6 @@ from utils.retrieval.tools.app_tools import load_app_tools, get_tool_status_mess
 from utils.retrieval.safety import AgentSafetyGuard, SafetyGuardError
 from utils.llm.clients import anthropic_client, ANTHROPIC_AGENT_MODEL
 from utils.llm.chat import _get_agentic_qa_prompt
-from utils.other.endpoints import timeit
-from utils.observability.langsmith import is_langsmith_enabled
 import logging
 
 # Import langsmith traceable if available
@@ -432,7 +430,6 @@ async def _run_anthropic_agent_stream(
         # Execute tool calls
         tool_use_blocks = [b for b in response.content if b.type == "tool_use"]
         tool_results = []
-        should_stop = False
 
         for block in tool_use_blocks:
             # Safety guard: validate before execution

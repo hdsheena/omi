@@ -7,7 +7,6 @@ from typing import AsyncGenerator, List, Optional, Tuple
 from utils.executors import storage_executor
 
 import database.chat as chat_db
-import database.notifications as notification_db
 import database.users as user_db
 from database.apps import record_app_usage
 from models.chat import ChatSession, Message, ResponseMessage, MessageConversation

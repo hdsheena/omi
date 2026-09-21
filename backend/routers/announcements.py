@@ -20,7 +20,7 @@ from database.announcements import (
     get_recent_changelogs,
     update_announcement,
 )
-from models.announcement import Announcement, AnnouncementType, Display, Targeting, TriggerType
+from models.announcement import Announcement, AnnouncementType, Display, Targeting
 from utils.other import endpoints as auth_endpoints
 
 router = APIRouter()

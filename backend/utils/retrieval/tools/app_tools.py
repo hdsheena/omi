@@ -8,7 +8,7 @@ in the Omi chat when the app is installed by a user.
 import contextvars
 from typing import List, Optional, Callable, Any, Dict
 import httpx
-from pydantic import BaseModel, Field, create_model
+from pydantic import Field, create_model
 from langchain_core.tools import StructuredTool
 from langchain_core.runnables import RunnableConfig
 

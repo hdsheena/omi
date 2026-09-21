@@ -1,7 +1,6 @@
 import os
 import uuid
 import json
-import hashlib
 import time
 import jwt
 from typing import Optional
@@ -9,7 +8,7 @@ from urllib.parse import quote, urlparse
 from cryptography.hazmat.primitives import serialization
 from jwt.algorithms import RSAAlgorithm
 from fastapi import APIRouter, Request, HTTPException, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 import pathlib
 import firebase_admin.auth

@@ -17,8 +17,8 @@ from database import (
 )
 from database.redis_db import set_credits_invalidation_signal
 from utils.fair_use import clear_fair_use_on_upgrade
-from utils.notifications import send_notification, send_subscription_paid_personalized_notification
-from models.users import PlanType, Subscription, SubscriptionStatus, PlanLimits
+from utils.notifications import send_subscription_paid_personalized_notification
+from models.users import PlanType, Subscription, SubscriptionStatus
 from utils.subscription import (
     get_basic_plan_limits,
     get_paid_plan_definitions,
@@ -466,7 +466,7 @@ def upgrade_subscription_endpoint(request: UpgradeSubscriptionRequest, uid: str 
             from_subscription=stripe_sub['id'],
         )
 
-        updated_schedule = stripe.SubscriptionSchedule.modify(
+        stripe.SubscriptionSchedule.modify(
             schedule.id,
             phases=[
                 {
@@ -588,9 +588,9 @@ async def stripe_webhook(request: Request, stripe_signature: str = Header(None))
 
     try:
         event = stripe_utils.parse_event(payload, stripe_signature)
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(status_code=400, detail="Invalid payload")
-    except stripe.error.SignatureVerificationError as e:
+    except stripe.error.SignatureVerificationError:
         raise HTTPException(status_code=400, detail="Invalid signature")
 
     if event['type'] == 'checkout.session.completed':
@@ -769,9 +769,9 @@ async def stripe_webhook(request: Request, stripe_signature: str = Header(None))
 
     try:
         event = stripe_utils.parse_connect_event(payload, stripe_signature)
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(status_code=400, detail="Invalid payload")
-    except stripe.error.SignatureVerificationError as e:
+    except stripe.error.SignatureVerificationError:
         raise HTTPException(status_code=400, detail="Invalid signature")
 
     if event['type'] == 'account.updated':

@@ -429,7 +429,6 @@ def set_assignee_conversation_segment(
     if value == 'null':
         value = None
 
-    is_unassigning = value is None or value is False
 
     if assign_type == 'is_user':
         conversation.transcript_segments[segment_idx].is_user = bool(value) if value is not None else False
@@ -498,7 +497,6 @@ def set_assignee_conversation_segment(
     if value == 'null':
         value = None
 
-    is_unassigning = value is None or value is False
 
     if assign_type == 'is_user':
         for segment in conversation.transcript_segments:
@@ -673,7 +671,7 @@ def search_conversations_endpoint(
 
 @router.get("/v1/conversations/{conversation_id}/suggested-apps", response_model=dict, tags=['conversations'])
 def get_conversation_suggested_apps(conversation_id: str, uid: str = Depends(auth.get_current_user_uid)):
-    from utils.apps import get_available_apps, get_available_app_by_id_with_reviews
+    from utils.apps import get_available_app_by_id_with_reviews
     from models.app import App
 
     conversation_data = _get_valid_conversation_by_id(uid, conversation_id)

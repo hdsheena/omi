@@ -24,7 +24,6 @@ from utils.other.storage import (
     list_audio_chunks,
     storage_client,
     private_cloud_sync_bucket,
-    _get_extension_for_path,
 )
 import logging
 
@@ -195,7 +194,7 @@ def perform_merge_async(
         # 8. Process conversation to generate title, summary, action items, memories, etc.
         if reprocess:
             try:
-                processed_conversation = process_conversation(
+                process_conversation(
                     uid,
                     new_conversation.language or 'en',
                     new_conversation,

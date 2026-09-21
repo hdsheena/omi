@@ -135,7 +135,7 @@ def get_action_items_tool(
         return f"Error: Configuration error - {str(config_error)}"
 
     # Get safety guard from config if available
-    safety_guard = config['configurable'].get('safety_guard')
+    config['configurable'].get('safety_guard')
 
     # Cap at 500 per call
     if limit > 500:

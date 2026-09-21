@@ -2,9 +2,8 @@
 Tools for accessing user conversations.
 """
 
-from datetime import datetime, timezone
-from typing import List, Optional
-from zoneinfo import ZoneInfo
+from datetime import datetime
+from typing import Optional
 import contextvars
 
 from langchain_core.runnables import RunnableConfig
@@ -13,11 +12,9 @@ from langchain_core.tools import tool
 import database.conversations as conversations_db
 import database.users as users_db
 import database.vector_db as vector_db
-from models.conversation import Conversation
 from models.other import Person
 from utils.conversations.factory import deserialize_conversation
 from utils.conversations.render import conversations_to_string
-from utils.llm.clients import embeddings
 import logging
 
 logger = logging.getLogger(__name__)
@@ -128,7 +125,7 @@ def get_conversations_tool(
     logger.info(f"✅ get_conversations_tool - uid: {uid}")
 
     # Get safety guard from config if available
-    safety_guard = config['configurable'].get('safety_guard')
+    config['configurable'].get('safety_guard')
 
     # Cap max_transcript_segments at 1000 to prevent flooding LLM context
     if max_transcript_segments != -1:
@@ -354,7 +351,7 @@ def search_conversations_tool(
     logger.info(f"✅ search_conversations_tool - uid: {uid}, query: {query}, limit: {limit}")
 
     # Get safety guard from config if available
-    safety_guard = config['configurable'].get('safety_guard')
+    config['configurable'].get('safety_guard')
 
     # Cap max_transcript_segments at 1000 to prevent flooding LLM context
     if max_transcript_segments != -1:

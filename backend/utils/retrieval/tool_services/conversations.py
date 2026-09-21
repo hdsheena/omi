@@ -5,12 +5,11 @@ Used by both LangChain tools (mobile chat) and REST router (desktop/web).
 
 import re
 from datetime import datetime, timezone
-from typing import List, Optional
+from typing import Optional
 
 import database.conversations as conversations_db
 import database.users as users_db
 import database.vector_db as vector_db
-from models.conversation import Conversation
 from models.other import Person
 from utils.conversations.factory import deserialize_conversation
 from utils.conversations.render import conversations_to_string

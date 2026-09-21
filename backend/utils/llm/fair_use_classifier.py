@@ -9,7 +9,6 @@ import json
 import logging
 import os
 from datetime import datetime, timedelta
-from typing import Optional
 
 import database.conversations as conversations_db
 from langchain_openai import ChatOpenAI
@@ -122,7 +121,7 @@ def _select_recipes(conversation_summaries: list) -> str:
         return ""
 
     # Check for signs that suggest specific recipes
-    titles = [c.get('title', '') for c in conversation_summaries]
+    [c.get('title', '') for c in conversation_summaries]
     durations = [c.get('duration_minutes', 0) for c in conversation_summaries]
     categories = [c.get('category', '') for c in conversation_summaries]
 

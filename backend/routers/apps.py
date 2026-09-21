@@ -51,7 +51,6 @@ from database.apps import (
 )
 from database.auth import get_user_from_uid
 from database.redis_db import (
-    delete_generic_cache,
     get_generic_cache,
     set_generic_cache,
     get_specific_user_review,
@@ -61,7 +60,6 @@ from database.redis_db import (
     disable_app,
     is_app_enabled,
     delete_app_cache_by_id,
-    is_username_taken,
     save_username,
     get_enabled_apps,
     get_conversation_summary_app_ids,
@@ -1223,7 +1221,7 @@ async def generate_app_endpoint(data: dict, uid: str = Depends(auth.get_current_
     Generate an app configuration from a natural language prompt.
     This is an experimental feature that uses AI to create app configurations.
     """
-    from utils.llm.app_generator import generate_app_from_prompt, generate_app_icon
+    from utils.llm.app_generator import generate_app_from_prompt
 
     prompt = data.get('prompt', '').strip()
     if not prompt:

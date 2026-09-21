@@ -1,7 +1,4 @@
-from typing import List
 
-from models.conversation_photo import ConversationPhoto
-from models.structured import Structured
 from utils.llm.clients import get_llm
 from utils.llm.usage_tracker import track_usage, Features
 

@@ -9,7 +9,7 @@ from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
 from typing import List, Optional
 import database.chat as chat_db
-from models.chat import ChatSession, FileChat, Message
+from models.chat import ChatSession
 from utils.other.chat_file import FileChatTool
 import logging
 

@@ -12,11 +12,10 @@ import json
 import logging
 import uuid
 from datetime import datetime
-from typing import Optional, Union, List, Any
+from typing import Optional, Any
 
 from fastapi import APIRouter, HTTPException, Header, Request, Response
 from fastapi.responses import StreamingResponse, JSONResponse
-from pydantic import BaseModel
 from utils.other.endpoints import check_rate_limit_inline
 
 import database.memories as memories_db

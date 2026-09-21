@@ -1,9 +1,9 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict
 from enum import Enum
 from datetime import datetime, timezone
 
-from models.memories import MemoryCategory, MemoryDB
+from models.memories import MemoryDB
 
 
 class ConversationTimestampRange(BaseModel):

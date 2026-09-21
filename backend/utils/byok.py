@@ -16,10 +16,9 @@ validated against enrolled fingerprints so that:
 import hashlib
 import logging
 import threading
-import time
 from contextvars import ContextVar
 from datetime import datetime, timezone
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional
 
 from cachetools import TTLCache
 from fastapi import HTTPException, Request

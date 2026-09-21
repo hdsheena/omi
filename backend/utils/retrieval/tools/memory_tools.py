@@ -3,7 +3,7 @@ Tools for accessing user memories and facts.
 """
 
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional
 import contextvars
 
 from langchain_core.tools import tool
@@ -117,7 +117,7 @@ def get_memories_tool(
     logger.info(f"✅ get_memories_tool - uid: {uid}, limit: {limit}")
 
     # Get safety guard from config if available
-    safety_guard = config['configurable'].get('safety_guard')
+    config['configurable'].get('safety_guard')
 
     # Cap at 5000 per call to prevent overloading context
     if limit > 5000:

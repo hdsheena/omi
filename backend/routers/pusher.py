@@ -4,7 +4,6 @@ import contextvars
 import json
 import time
 from collections import deque
-from datetime import datetime, timezone
 from typing import Dict, Optional, Set
 
 from fastapi import APIRouter
@@ -14,7 +13,6 @@ from starlette.websockets import WebSocketState
 import database.conversations as conversations_db
 from database import users as users_db
 from database.redis_db import get_cached_user_geolocation
-from models.conversation import Conversation
 from models.conversation_enums import ConversationStatus
 from utils.conversations.factory import deserialize_conversation
 from models.geolocation import Geolocation
@@ -33,7 +31,7 @@ from utils.webhooks import (
     realtime_transcript_webhook,
     get_audio_bytes_webhook_seconds,
 )
-from utils.other.storage import upload_audio_chunk, upload_audio_chunks_batch
+from utils.other.storage import upload_audio_chunks_batch
 from utils.metrics import PUSHER_ACTIVE_WS_CONNECTIONS
 from utils.speaker_identification import extract_speaker_samples
 import logging
@@ -115,12 +113,11 @@ async def _process_conversation_task(
             conversation = await loop.run_in_executor(
                 None, lambda: ctx.run(process_conversation, uid, language, conversation)
             )
-            messages = await trigger_external_integrations(uid, conversation)
+            await trigger_external_integrations(uid, conversation)
         except Exception as e:
             logger.error(f"Error processing conversation: {e} {uid} {conversation_id}")
             conversations_db.set_conversation_as_discarded(uid, conversation.id)
             conversation.discarded = True
-            messages = []
 
         # Send success response back (minimal - transcribe will fetch from DB)
         response = {"conversation_id": conversation_id, "success": True}

@@ -17,7 +17,7 @@ import httpx
 
 from utils.executors import critical_executor, storage_executor
 
-from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, Query, Header, Request, Response
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, Query, Request, Response
 from fastapi.responses import JSONResponse, StreamingResponse
 from opuslib import Decoder
 from pydub import AudioSegment
@@ -33,7 +33,7 @@ from database.sync_jobs import (
     mark_job_completed,
     mark_job_failed,
 )
-from models.conversation import Conversation, CreateConversation
+from models.conversation import CreateConversation
 from models.conversation_enums import ConversationSource
 from utils.conversations.factory import deserialize_conversation
 from models.transcript_segment import TranscriptSegment
@@ -48,7 +48,6 @@ from utils.other.storage import (
     get_merged_audio_signed_url,
 )
 
-from utils import encryption
 from utils.log_sanitizer import sanitize
 from utils.stt.pre_recorded import deepgram_prerecorded, get_deepgram_model_for_language, postprocess_words
 from utils.stt.vad import vad_is_empty
@@ -947,7 +946,6 @@ def process_segment(
 
         # When single-language mode is active, trust the user's language choice
         # rather than Deepgram's detection (avoids overriding explicit selection).
-        use_return_language = not (single_language_mode and user_language)
         words, detected_language = deepgram_prerecorded(
             url,
             speakers_count=3,
@@ -1550,7 +1548,7 @@ async def sync_local_files_v2(
             )
 
         # --- Create Redis job and start background thread ---
-        job = create_sync_job(uid, total_files=len(files), total_segments=total_segments, job_id=job_id)
+        create_sync_job(uid, total_files=len(files), total_segments=total_segments, job_id=job_id)
 
         # Fetch user transcription preferences once before spawning background thread
         transcription_prefs = users_db.get_user_transcription_preferences(uid)

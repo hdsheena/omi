@@ -591,10 +591,9 @@ def get_transcript_structure(
 
     response_language = output_language_code or language_code
     try:
-        user_name = get_user_name(uid)
+        get_user_name(uid)
     except Exception as e:
         logger.warning(f'Failed to load user name for transcript structuring (uid={uid}): {e}')
-        user_name = 'The User'
 
     # First system message: task-specific instructions (static prefix enables cross-conversation caching)
     # NOTE: language instructions are in context_message (second message) to keep this prefix fully static.

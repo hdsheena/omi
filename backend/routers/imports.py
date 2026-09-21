@@ -4,16 +4,14 @@ Import endpoints for importing data from external sources.
 
 import asyncio
 import os
-import uuid
-from typing import List, Optional
+from typing import List
 
 from utils.executors import storage_executor
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 import database.import_jobs as import_jobs_db
-import database.conversations as conversations_db
-from models.import_job import ImportJob, ImportJobResponse, ImportJobStatus, ImportSourceType
+from models.import_job import ImportJobResponse, ImportJobStatus, ImportSourceType
 from utils.other import endpoints as auth
 from utils.imports.limitless import create_import_job, process_limitless_import
 

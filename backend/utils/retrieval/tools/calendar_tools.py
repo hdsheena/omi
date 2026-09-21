@@ -3,7 +3,6 @@ Tools for accessing Google Calendar events.
 """
 
 import asyncio
-import os
 import contextvars
 from datetime import datetime, timedelta, timezone
 from typing import Optional
@@ -12,7 +11,6 @@ import httpx
 from langchain_core.tools import tool
 from langchain_core.runnables import RunnableConfig
 
-import database.users as users_db
 from utils.http_client import get_auth_client
 from utils.retrieval.tools.integration_base import (
     ensure_capped,
@@ -667,7 +665,7 @@ async def get_calendar_events_tool(
                 logger.error(f"❌ Non-auth error: {error_msg}")
                 return f"Error fetching calendar events: {error_msg}"
 
-        events_count = len(events) if events else 0
+        len(events) if events else 0
 
         if not events:
             date_info = ""
@@ -847,7 +845,7 @@ async def create_calendar_event_tool(
                 attendees=attendee_list,
             )
 
-            event_id = event.get('id', 'unknown')
+            event.get('id', 'unknown')
             event_link = event.get('htmlLink', '')
 
             result = f"✅ Successfully created calendar event: {title}\n"
@@ -888,7 +886,7 @@ async def create_calendar_event_tool(
                             attendees=attendee_list,
                         )
 
-                        event_id = event.get('id', 'unknown')
+                        event.get('id', 'unknown')
                         event_link = event.get('htmlLink', '')
 
                         result = f"✅ Successfully created calendar event: {title}\n"

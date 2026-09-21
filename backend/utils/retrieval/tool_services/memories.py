@@ -3,7 +3,6 @@ Shared service functions for memory retrieval.
 Used by both LangChain tools (mobile chat) and REST router (desktop/web).
 """
 
-from datetime import datetime
 from typing import Optional
 
 import database.memories as memory_db

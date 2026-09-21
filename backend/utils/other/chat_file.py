@@ -1,9 +1,8 @@
-import asyncio
 import base64
 import mimetypes
 import re
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 import openai
 from openai import AsyncOpenAI, AssistantEventHandler

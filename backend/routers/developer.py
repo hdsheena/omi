@@ -14,7 +14,6 @@ import database.conversations as conversations_db
 import database.dev_api_key as dev_api_key_db
 import database.action_items as action_items_db
 import database.goals as goals_db
-import database.users as users_db
 from database.vector_db import upsert_memory_vectors_batch
 
 from models.folder import Folder
@@ -357,7 +356,7 @@ def update_memory(
             status_code=422, detail="At least one field (content, visibility, tags, or category) must be provided"
         )
 
-    old_visibility = memory.get('visibility')
+    memory.get('visibility')
 
     if request.content is not None:
         memories_db.edit_memory(uid, memory_id, request.content.strip())

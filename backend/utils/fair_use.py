@@ -6,7 +6,6 @@ detects soft-cap violations, triggers LLM classification,
 and manages graduated enforcement (warning → throttle → restrict).
 """
 
-import asyncio
 import logging
 import os
 import time
@@ -16,7 +15,7 @@ from datetime import datetime, timedelta
 import database.fair_use as fair_use_db
 import database.users as users_db
 from database.redis_db import r as redis_client
-from models.fair_use import UsageType, FairUseStage, SoftCapTrigger
+from models.fair_use import SoftCapTrigger
 from utils.subscription import has_transcription_credits, is_paid_plan
 
 # Deferred imports — exception to CLAUDE.md top-level import rule.

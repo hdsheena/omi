@@ -1,7 +1,7 @@
 import asyncio
 import os
 from datetime import datetime, timezone
-from typing import Dict, Any, Callable, TypeVar, List, Optional, Tuple
+from typing import Dict, Any, Callable, TypeVar, List
 
 from pydantic import BaseModel
 from ulid import ULID
@@ -12,10 +12,10 @@ from database.apps import (
     get_persona_by_id_db,
     get_persona_by_username_twitter_handle_db,
 )
-from database.redis_db import delete_generic_cache, save_username, is_username_taken
+from database.redis_db import delete_generic_cache, save_username
 import httpx
 
-from utils.llm.persona import condense_tweets, generate_twitter_persona_prompt
+from utils.llm.persona import generate_twitter_persona_prompt
 from utils.conversations.memories import process_twitter_memories
 import logging
 

@@ -5,14 +5,12 @@ from utils.executors import storage_executor
 
 import pytz
 
-import database.chat as chat_db
 import database.conversations as conversations_db
 import database.notifications as notification_db
 from database.redis_db import try_acquire_daily_summary_lock
 from models.notification_message import NotificationMessage
-from models.conversation import Conversation
 from utils.conversations.factory import deserialize_conversation
-from utils.llm.external_integrations import get_conversation_summary, generate_comprehensive_daily_summary
+from utils.llm.external_integrations import generate_comprehensive_daily_summary
 from utils.notifications import send_bulk_notification, send_notification
 from utils.webhooks import day_summary_webhook
 import database.daily_summaries as daily_summaries_db

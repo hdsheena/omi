@@ -1,10 +1,9 @@
-from typing import List, Optional, Any
+from typing import List, Optional
 
 from pydantic import BaseModel
 
 from models.chat import Message
 from models.conversation import Conversation
-from models.conversation_photo import ConversationPhoto
 
 # Freemium action constants
 FREEMIUM_ACTION_SETUP_ON_DEVICE_STT = "setup_on_device_stt"

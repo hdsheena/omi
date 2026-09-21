@@ -4,7 +4,6 @@ Wrapped 2025 API endpoints.
 Provides generation and retrieval of yearly recap data.
 """
 
-from datetime import datetime, timezone
 
 from utils.executors import critical_executor
 from typing import Optional

@@ -159,11 +159,10 @@ def generate_comprehensive_daily_summary(
         all_person_ids.extend(m.get_person_ids())
 
     people = []
-    people_names = []
     if all_person_ids:
         people_data = users_db.get_people_by_ids(uid, list(set(all_person_ids)))
         people = [Person(**p) for p in people_data]
-        people_names = [p.name for p in people if p.name]
+        [p.name for p in people if p.name]
 
     conversation_history = conversations_to_string(conversations, people=people)
 

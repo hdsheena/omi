@@ -2,8 +2,7 @@ import json
 import re
 import threading
 import uuid
-from typing import List, Dict, Any, Union, Optional
-import hashlib
+from typing import List, Dict, Union, Optional
 import os
 
 import pytz
@@ -42,7 +41,6 @@ from database.users import (
 )
 from utils.stt.streaming import deepgram_nova3_multi_languages
 from database.users import *
-from models.conversation import Conversation
 from models.geolocation import Geolocation
 from utils.conversations.factory import deserialize_conversation, deserialize_conversations
 from models.other import Person, CreatePerson

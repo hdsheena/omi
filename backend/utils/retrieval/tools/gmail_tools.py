@@ -3,13 +3,11 @@ Tools for accessing Gmail messages.
 """
 
 import contextvars
-from datetime import datetime, timedelta, timezone
 from typing import Optional, List
 
 from langchain_core.tools import tool
 from langchain_core.runnables import RunnableConfig
 
-import database.users as users_db
 from utils.retrieval.tools.integration_base import (
     ensure_capped,
     prepare_access,
@@ -259,7 +257,7 @@ def get_gmail_messages_tool(
         if err:
             return err
 
-        messages_count = len(messages) if messages else 0
+        len(messages) if messages else 0
 
         if not messages:
             query_info = f" matching '{query}'" if query else ""

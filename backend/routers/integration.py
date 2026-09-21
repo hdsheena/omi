@@ -1,4 +1,3 @@
-import os
 from datetime import datetime, timedelta, timezone
 from typing import Optional, List, Tuple, Union
 
@@ -9,11 +8,10 @@ from fastapi.responses import JSONResponse
 import database.apps as apps_db
 import database.conversations as conversations_db
 import utils.apps as apps_utils
-from utils.apps import verify_api_key, app_can_read_tasks
+from utils.apps import verify_api_key
 import database.redis_db as redis_db
 import database.memories as memory_db
 from database.redis_db import get_enabled_apps, r as redis_client
-import database.notifications as notification_db
 import database.action_items as action_items_db
 import models.integrations as integration_models
 import models.conversation as conversation_models

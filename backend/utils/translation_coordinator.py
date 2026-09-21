@@ -14,10 +14,10 @@ import asyncio
 import hashlib
 import logging
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Callable, Dict, List, Optional, Tuple
 
-from models.transcript_segment import TranscriptSegment, Translation, SENTENCE_ENDERS
+from models.transcript_segment import TranscriptSegment, SENTENCE_ENDERS
 from utils.translation import (
     TranslationNeed,
     classify_translation_need,

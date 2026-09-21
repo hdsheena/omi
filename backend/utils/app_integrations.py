@@ -1,5 +1,4 @@
 import asyncio
-import threading
 from typing import List
 import os
 import time
@@ -15,7 +14,6 @@ from utils.http_client import (
 )
 from utils.executors import critical_executor
 
-import database.notifications as notification_db
 from database import mem_db
 from database import redis_db
 from database.apps import record_app_usage
@@ -28,7 +26,7 @@ from database.redis_db import (
     incr_daily_notification_count,
     get_daily_notification_count,
 )
-from models.app import App, ProactiveNotification, UsageHistoryType
+from models.app import App, UsageHistoryType
 from models.chat import Message
 from models.conversation import Conversation
 from models.conversation_enums import ConversationSource

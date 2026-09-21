@@ -1,7 +1,6 @@
 import os
 import random
 import re
-import threading
 import uuid
 import logging
 import asyncio
@@ -393,7 +392,6 @@ def _trigger_apps(
     # Clear existing app results
     conversation.apps_results = []
 
-    threads = []
 
     def execute_app(app):
         with track_usage(uid, Features.CONVERSATION_APPS):

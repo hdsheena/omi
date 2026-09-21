@@ -1,7 +1,6 @@
 from .clients import get_llm
 import json
 import re
-import os
 from datetime import datetime, timezone
 from typing import List, Optional
 from zoneinfo import ZoneInfo
@@ -17,7 +16,6 @@ from models.app import App
 from models.chat import Message, MessageSender, PageContext
 from models.conversation_enums import CategoryEnum
 from models.conversation_photo import ConversationPhoto
-from models.structured import ActionItem, Event
 from models.other import Person
 from models.transcript_segment import TranscriptSegment
 from utils.llms.memory import get_prompt_memories

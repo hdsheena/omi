@@ -1,5 +1,4 @@
 import asyncio
-import hashlib
 import io
 import json
 import logging
@@ -8,7 +7,6 @@ import random
 import struct
 import time
 import uuid
-import wave
 from collections import deque, OrderedDict
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
@@ -68,10 +66,9 @@ from utils.conversations.process_conversation import retrieve_in_progress_conver
 from utils.notifications import send_credit_limit_notification, send_silent_user_notification
 from utils.other import endpoints as auth
 from utils.other.storage import get_profile_audio_if_exists, get_user_has_speech_profile
-from utils.pusher import connect_to_trigger_pusher, PusherCircuitBreakerOpen, get_circuit_breaker, CircuitState
+from utils.pusher import connect_to_trigger_pusher, PusherCircuitBreakerOpen
 from utils.speaker_identification import detect_speaker_from_text
 from utils.stt.streaming import (
-    STTService,
     get_stt_service_for_language,
     process_audio_dg,
 )
@@ -93,7 +90,6 @@ from utils.translation import TranslationService
 from utils.translation_cache import (
     TranscriptSegmentLanguageCache,
     ConversationLanguageState,
-    should_persist_translation,
 )
 from utils.translation_coordinator import TranslationCoordinator
 from utils.webhooks import get_audio_bytes_webhook_seconds
@@ -104,7 +100,6 @@ from utils.audio import AudioRingBuffer
 from utils.metrics import (
     BACKEND_LISTEN_ACTIVE_WS_CONNECTIONS,
     PUSHER_CIRCUIT_BREAKER_REJECTIONS,
-    PUSHER_CIRCUIT_BREAKER_STATE,
     PUSHER_SESSION_DEGRADED,
 )
 from utils.stt.speaker_embedding import (
@@ -348,7 +343,6 @@ async def _stream_handler(
     # === Speaker Identification State ===
     RING_BUFFER_DURATION = 60.0  # seconds
     SPEAKER_ID_MIN_AUDIO = 2.0
-    SPEAKER_ID_TARGET_AUDIO = 4.0
 
     audio_ring_buffer: Optional[AudioRingBuffer] = None
     speaker_id_segment_queue: asyncio.Queue[dict] = asyncio.Queue(maxsize=100)
@@ -1560,7 +1554,7 @@ async def _stream_handler(
     translation_service = TranslationService()
 
     # Normalize locale-tagged language (e.g. "en-US" -> "en") for langdetect compatibility
-    translation_language_base = translation_language.split('-')[0] if translation_language else None
+    translation_language.split('-')[0] if translation_language else None
 
     # Translation coordinator (issue #6155) — replaces debounce/per-segment state
     translation_persist_lock = asyncio.Lock()
@@ -1637,8 +1631,6 @@ async def _stream_handler(
     )
 
     # Keep legacy state for backward compatibility during transition
-    pending_translations = {}
-    translation_flushing = False
 
     async def translate(segments: List[TranscriptSegment], conversation_id: str, removed_ids: List[str] = None):
         """Route updated segments to the TranslationCoordinator."""
@@ -2147,7 +2139,7 @@ async def _stream_handler(
 
                     # Embeding id speaker indentification
                     if speaker_id_enabled and person_embeddings_cache:
-                        started_at_ts = conversation.started_at.timestamp()
+                        conversation.started_at.timestamp()
                         if (
                             segment.speaker_id is not None
                             and not segment.person_id

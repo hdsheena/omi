@@ -1,10 +1,10 @@
 import asyncio
 import logging
-from typing import List, Optional
+from typing import List
 
 from utils.executors import critical_executor
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 
 import database.memories as memories_db

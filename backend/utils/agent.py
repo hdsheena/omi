@@ -1,6 +1,6 @@
 import asyncio
 from datetime import datetime, timezone
-from typing import AsyncGenerator, List, Optional, Any
+from typing import AsyncGenerator, List, Optional
 from agents import Agent, ModelSettings, Runner, trace
 from agents.mcp import MCPServer, MCPServerStdio
 from agents.model_settings import Reasoning

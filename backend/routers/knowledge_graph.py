@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, Depends, BackgroundTasks
 from pydantic import BaseModel
 from typing import List, Dict, Any
 
 from database import knowledge_graph as kg_db
 from database import memories as memories_db
 from database.auth import get_user_name
-from utils.llm.knowledge_graph import extract_knowledge_from_memory, rebuild_knowledge_graph
+from utils.llm.knowledge_graph import rebuild_knowledge_graph
 from utils.other import endpoints as auth
 
 router = APIRouter()

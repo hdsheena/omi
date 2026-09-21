@@ -6,7 +6,7 @@ from the device to our backend and stored in Firestore.
 """
 
 import contextvars
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from typing import Optional
 
 from langchain_core.tools import tool
@@ -180,8 +180,8 @@ def get_apple_health_sleep_tool(
             return "No sleep data found. Make sure Apple Health is synced from your iPhone."
 
         total_sleep_hours = sleep_data.get('total_sleep_hours', 0)
-        total_in_bed_hours = sleep_data.get('total_in_bed_hours', 0)
-        sessions_count = sleep_data.get('sessions_count', 0)
+        sleep_data.get('total_in_bed_hours', 0)
+        sleep_data.get('sessions_count', 0)
         daily_sleep = sleep_data.get('daily', [])
 
         result = f"Apple Health Sleep Data:\n\n"

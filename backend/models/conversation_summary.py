@@ -21,7 +21,6 @@ class ConversationSummary(BaseModel):
 
     @classmethod
     def from_conversation(cls, c: 'Conversation', **kwargs) -> 'ConversationSummary':
-        from models.conversation import Conversation
 
         return cls(
             id=c.id,

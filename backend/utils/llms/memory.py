@@ -1,8 +1,8 @@
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 
 import database.memories as memories_db
 from database.auth import get_user_name
-from models.memories import Memory, MemoryCategory
+from models.memories import Memory
 import logging
 
 logger = logging.getLogger(__name__)

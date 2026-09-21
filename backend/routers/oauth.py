@@ -148,7 +148,7 @@ async def oauth_token(firebase_id_token: str = Form(...), app_id: str = Form(...
                         status_code=400,
                         detail='App setup is not completed. Please complete app setup before authorizing.',
                     )
-            except (httpx.HTTPStatusError, httpx.RequestError) as e:
+            except (httpx.HTTPStatusError, httpx.RequestError):
                 raise HTTPException(
                     status_code=503,
                     detail=f'Failed to verify app setup completion. Please try again later or contact support.',
@@ -169,7 +169,7 @@ async def oauth_token(firebase_id_token: str = Form(...), app_id: str = Form(...
             enable_app(uid, app_id)
             if (app.private is None or not app.private) and (app.uid is None or app.uid != uid) and not is_tester(uid):
                 increase_app_installs_count(app_id)
-        except Exception as e:
+        except Exception:
             raise HTTPException(
                 status_code=500,
                 detail=f"Could not automatically enable the app. Please try again or enable it manually.",

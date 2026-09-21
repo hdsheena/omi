@@ -8,7 +8,7 @@ import secrets
 import json
 import base64
 import hashlib
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 import httpx
 
 import database.users as users_db
