@@ -84,35 +84,61 @@ def get_memories(
     if end_date:
         memories_ref = memories_ref.where(filter=FieldFilter('created_at', '<=', end_date))
 
-    memories_ref = (
-        memories_ref.order_by('scoring', direction=firestore.Query.DESCENDING)
-        .order_by('created_at', direction=firestore.Query.DESCENDING)
+    memories_ref = memories_ref.order_by('scoring', direction=firestore.Query.DESCENDING).order_by(
+        'created_at', direction=firestore.Query.DESCENDING
     )
 
-    # We must fetch iteratively because we filter out rejected memories (user_review == False) in Python.
-    # If we apply .limit() and .offset() directly to the Firestore query, we might skip valid
-    # memories or return fewer than 'limit' memories if some were rejected.
+    # We fetch a larger chunk initially since some might be filtered out
+    # If the user asks for limit=100, we fetch 200, to increase chances we get 100 valid ones.
+    # The client sends offset as an index into the *filtered* list, not the raw Firestore documents.
+    # Therefore, using Firestore's .offset() directly causes the pagination to jump incorrectly,
+    # as we don't know how many raw documents correspond to the requested filtered offset.
+    # To fix this without O(N^2) reads, we must fetch iteratively using start_after,
+    # keeping track of how many *filtered* documents we've skipped until we reach the offset.
 
     result = []
-    current_offset = 0
-    # Fetch in chunks to avoid pulling all memories into memory.
     chunk_size = max(50, limit * 2 if limit else 100)
 
-    while len(result) < offset + limit:
-        query = memories_ref.limit(chunk_size).offset(current_offset)
-        docs = [doc.to_dict() for doc in query.stream()]
+    query = memories_ref.limit(chunk_size)
+    skipped = 0
 
+    while len(result) < limit:
+        docs = list(query.stream())
         if not docs:
             break
 
-        current_offset += len(docs)
+        # Filter docs
+        filtered = [doc for doc in docs if doc.to_dict().get('user_review') is not False]
 
-        # Filter out rejected memories
-        filtered = [doc for doc in docs if doc.get('user_review') is not False]
-        result.extend(filtered)
+        # Determine how many of the filtered docs we still need to skip
+        if skipped < offset:
+            to_skip = min(offset - skipped, len(filtered))
+            skipped += to_skip
+            filtered = filtered[to_skip:]
 
-    logger.info(f"get_memories returned {min(limit, len(result) - offset)} valid memories out of requested limit {limit}")
-    return result[offset : offset + limit]
+        result.extend([doc.to_dict() for doc in filtered])
+
+        # If we got enough, break
+        if len(result) >= limit:
+            break
+
+        # Set up next query using the last document as cursor
+        last_doc = docs[-1]
+        chunk_size = limit - len(
+            result
+        )  # Only fetch what we need for result + some buffer? No, if we are still skipping, we need a full chunk
+        if skipped < offset:
+            chunk_size = max(50, limit * 2)
+        else:
+            chunk_size = max(50, limit - len(result))
+
+        query = memories_ref.start_after(last_doc).limit(chunk_size)
+
+    # Trim to exactly limit
+    result = result[:limit]
+
+    logger.info(f"get_memories returned {len(result)} valid memories out of requested limit {limit}")
+    return result
 
 
 @prepare_for_read(decrypt_func=_prepare_memory_for_read)
