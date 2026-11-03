@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 async def test_now():
     import httpx
     from urllib.parse import quote

@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 logging.getLogger('nordicsemi').setLevel(logging.WARNING)
 
 # --- Main DFU Logic (using adafruit-nrfutil) ---
+
+
 async def perform_dfu(device_address: str, zip_file_path: str):
     logger.info(f"Starting DFU process for {device_address} with {zip_file_path} using adafruit-nrfutil")
 
@@ -114,6 +116,8 @@ async def perform_dfu(device_address: str, zip_file_path: str):
     pass # Replace with actual DFU implementation
 
 # --- Argument Parser ---
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Perform Nordic Secure DFU over BLE.")
     parser.add_argument("zip_file", help="Path to the DFU package (.zip file).", type=Path)
@@ -123,6 +127,8 @@ def parse_args():
     return parser.parse_args()
 
 # --- Main Execution ---
+
+
 async def main():
     args = parse_args()
 

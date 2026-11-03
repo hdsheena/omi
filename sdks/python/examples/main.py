@@ -11,6 +11,7 @@ OMI_MAC = "C9DDDACB-CA1E-CDD6-7A17-59A2A5303CDA"
 # Standard Omi audio characteristic UUID
 OMI_CHAR_UUID = "19B10001-E8F2-537E-4F6C-D104768A1214"
 
+
 def main() -> None:
     api_key: str | None = os.getenv("DEEPGRAM_API_KEY")
     if not api_key:
@@ -28,7 +29,6 @@ def main() -> None:
             except Exception as e:
                 print("Queue Error:", e)
                 
-
     async def run() -> None:
         await asyncio.gather(
             listen_to_omi(OMI_MAC, OMI_CHAR_UUID, handle_ble_data),
@@ -36,6 +36,7 @@ def main() -> None:
         )
 
     asyncio.run(run())
+
 
 if __name__ == '__main__':
     main()

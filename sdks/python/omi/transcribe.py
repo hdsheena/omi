@@ -4,6 +4,7 @@ import asyncio
 from typing import Any, Dict, Callable, Optional
 from asyncio import Queue
 
+
 async def transcribe(
     audio_queue: Queue[bytes], 
     api_key: str,

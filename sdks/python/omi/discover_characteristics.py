@@ -3,6 +3,7 @@ from bleak import BleakClient
 
 OMI_MAC: str = "7F52EC55-50C9-D1B9-E8D7-19B83217C97D"  # Replace with your actual MAC
 
+
 async def main() -> None:
     """
     Discover and display all Bluetooth services and characteristics for an Omi device.

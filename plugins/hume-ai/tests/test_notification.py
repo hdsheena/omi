@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 async def test_notification():
     """Test sending a notification to Omi"""
     import httpx

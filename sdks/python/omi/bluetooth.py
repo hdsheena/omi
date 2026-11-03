@@ -2,11 +2,13 @@ import asyncio
 from typing import Callable, Any
 from bleak import BleakScanner, BleakClient
 
+
 def print_devices() -> None:
     """Scan for and print all nearby Bluetooth devices."""
     devices = asyncio.run(BleakScanner.discover())
     for i, d in enumerate(devices):
         print(f"{i}. {d.name} [{d.address}]")
+
 
 async def listen_to_omi(
     mac_address: str, 

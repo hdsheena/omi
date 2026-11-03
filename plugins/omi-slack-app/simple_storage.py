@@ -25,6 +25,8 @@ users: Dict[str, dict] = {}
 sessions: Dict[str, dict] = {}
 
 # Load from file on startup
+
+
 def load_storage():
     global users, sessions
     try:
@@ -43,6 +45,7 @@ def load_storage():
     except Exception as e:
         print(f"⚠️  Could not load sessions: {e}", flush=True)
 
+
 def save_users():
     try:
         with open(USERS_FILE, 'w') as f:
@@ -50,12 +53,14 @@ def save_users():
     except Exception as e:
         print(f"⚠️  Could not save users: {e}", flush=True)
 
+
 def save_sessions():
     try:
         with open(SESSIONS_FILE, 'w') as f:
             json.dump(sessions, f, default=str, indent=2)
     except Exception as e:
         print(f"⚠️  Could not save sessions: {e}", flush=True)
+
 
 # Load on module import
 load_storage()

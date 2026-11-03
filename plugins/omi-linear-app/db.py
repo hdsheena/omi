@@ -17,6 +17,7 @@ except ImportError:
 # Redis connection
 _redis_client = None
 
+
 def _get_redis() -> Optional['redis.Redis']:
     """Get or create Redis connection."""
     global _redis_client

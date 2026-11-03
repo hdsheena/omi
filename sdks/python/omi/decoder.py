@@ -1,6 +1,7 @@
 from typing import Union
 from opuslib import Decoder
 
+
 class OmiOpusDecoder:
     """Opus audio decoder for Omi device audio packets."""
     

@@ -38,9 +38,11 @@ if not os.getenv('OPENAI_API_KEY'):
     logger.error("OPENAI_API_KEY not found in environment variables")
     raise ValueError("OPENAI_API_KEY environment variable is required")
 
+
 class WebhookRequest(BaseModel):
     session_id: str
     segments: List[Dict[str, Any]] = []
+
 
 class MessageBuffer:
     def __init__(self):
@@ -90,10 +92,12 @@ class MessageBuffer:
                 del self.buffers[session_id]
             self.last_cleanup = current_time
 
+
 # Initialize message buffer
 message_buffer = MessageBuffer()
 
 ANALYSIS_INTERVAL = 300  # 120 seconds between analyses
+
 
 def extract_topics(discussion_text: str) -> list:
     """Extract topics from the discussion using OpenAI"""
@@ -116,6 +120,7 @@ def extract_topics(discussion_text: str) -> list:
     except Exception as e:
         logger.error(f"Error extracting topics: {str(e)}")
         return []
+
 
 def create_notification_prompt(messages: list) -> dict:
     """Create notification with prompt template"""
@@ -175,6 +180,7 @@ Remember: First evaluate silently, then either respond with empty string OR give
             }
         }
     }
+
 
 @router.post('/notification/mentor/webhook')
 async def webhook(request: WebhookRequest):
@@ -243,9 +249,11 @@ async def webhook(request: WebhookRequest):
 
     return JSONResponse(content={}, status_code=202)
 
+
 @router.get('/notification/mentor/webhook/setup-status')
 async def setup_status():
     return {"is_setup_completed": True}
+
 
 @router.get('/notification/mentor/status')
 async def status():

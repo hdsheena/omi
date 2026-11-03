@@ -94,6 +94,7 @@ def load_emotion_config():
     print(f"ℹ️ Using default emotion config")
     return default_config
 
+
 EMOTION_CONFIG = load_emotion_config()
 
 

@@ -26,6 +26,8 @@ sessions: Dict[str, dict] = {}
 oauth_states: Dict[str, dict] = {}  # Store OAuth state and code_verifier
 
 # Load from file on startup
+
+
 def load_storage():
     global users, sessions
     try:
@@ -44,6 +46,7 @@ def load_storage():
     except Exception as e:
         print(f"⚠️  Could not load sessions: {e}")
 
+
 def save_users():
     try:
         with open(USERS_FILE, 'w') as f:
@@ -51,12 +54,14 @@ def save_users():
     except Exception as e:
         print(f"⚠️  Could not save users: {e}")
 
+
 def save_sessions():
     try:
         with open(SESSIONS_FILE, 'w') as f:
             json.dump(sessions, f, default=str)
     except Exception as e:
         print(f"⚠️  Could not save sessions: {e}")
+
 
 # Load on module import
 load_storage()
