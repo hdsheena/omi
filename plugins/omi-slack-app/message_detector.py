@@ -53,7 +53,9 @@ class MessageDetector:
         return content if content else None
     
     @classmethod
-    async def ai_extract_message_and_channel(cls, all_segments_text: str, available_channels: list) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+    async def ai_extract_message_and_channel(
+        cls, all_segments_text: str, available_channels: list
+    ) -> Tuple[Optional[str], Optional[str], Optional[str]]:
         """
         Extract message content and target channel from voice segments.
         Uses AI to intelligently parse "send X message to/in Y channel"
@@ -70,7 +72,7 @@ class MessageDetector:
                 messages=[
                     {
                         "role": "system",
-                        "content": f"""You are a Slack message parser. Extract the channel name and message content from voice commands.
+                        "content": f"""You are a Slack message parser. Extract the channel name and message content from voice commands.  # noqa: E501
 
 Available channels: {', '.join(channel_names)}
 

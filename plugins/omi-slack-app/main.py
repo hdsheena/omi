@@ -56,7 +56,11 @@ async def monitor_session_timeouts():
                     segments_count = session.get("segments_count", 0)
                     accumulated = session.get("accumulated_text", "")
                     
-                    print(f"⏰ TIMEOUT MONITOR: Processing session {session_id} after {idle_time:.1f}s idle ({segments_count} segment(s))", flush=True)
+                    print(
+                        f"⏰ TIMEOUT MONITOR: Processing session {session_id} "
+                        f"after {idle_time:.1f}s idle ({segments_count} segment(s))",
+                        flush=True
+                    )
                     
                     # Get user
                     uid = session.get("uid")
@@ -113,7 +117,11 @@ async def monitor_session_timeouts():
                                 else:
                                     print(f"⏰ FAILED: {result.get('error') if result else 'Unknown'}", flush=True)
                             else:
-                                print(f"⏰ Insufficient content to send (message: '{message[:50] if message else 'None'}...')", flush=True)
+                                print(
+                                    f"⏰ Insufficient content to send "
+                                    f"(message: '{message[:50] if message else 'None'}...')",
+                                    flush=True
+                                )
                             
                             # Reset session
                             SimpleSessionStorage.reset_session(session_id)
@@ -276,7 +284,7 @@ async def root(uid: str = Query(None)):
                     <button type="button" class="btn btn-secondary btn-block" onclick="refreshChannels()">
                         🔄 Refresh Channels
                     </button>
-                    <button type="button" class="btn btn-secondary btn-block" onclick="logoutUser()" style="margin-top: 20px; border-color: #e01e5a; color: #e01e5a;">
+                    <button type="button" class="btn btn-secondary btn-block" onclick="logoutUser()" style="margin-top: 20px; border-color: #e01e5a; color: #e01e5a;">  # noqa: E501
                         🚪 Logout & Clear Data
                     </button>
                 </div>
@@ -284,7 +292,7 @@ async def root(uid: str = Query(None)):
                 <div class="card" style="background: rgba(29, 155, 209, 0.05); border-color: #1d9bd1;">
                     <h3 style="font-size: 16px;">ℹ️ Reset or Re-authenticate</h3>
                     <p style="text-align: left; font-size: 14px; margin-bottom: 0; color: #9ca0a5;">
-                        Use <strong>"Logout & Clear Data"</strong> to reset your connection and re-authenticate to the same workspace with fresh settings.
+                        Use <strong>"Logout & Clear Data"</strong> to reset your connection and re-authenticate to the same workspace with fresh settings.  # noqa: E501
                     </p>
                 </div>
                 
@@ -297,7 +305,7 @@ async def root(uid: str = Query(None)):
                         <div class="step">
                             <div class="step-number">1</div>
                             <div class="step-content">
-                                Say <strong>"Send Slack message"</strong>, <strong>"Post Slack message"</strong>, or <strong>"Post in Slack"</strong>
+                                Say <strong>"Send Slack message"</strong>, <strong>"Post Slack message"</strong>, or <strong>"Post in Slack"</strong>  # noqa: E501
                             </div>
                         </div>
                         <div class="step">
@@ -522,7 +530,7 @@ async def auth_callback(
                             </p>
                         </div>
                         
-                        <a href="/?uid={uid}" class="btn btn-primary btn-block" style="font-size: 17px; padding: 16px; margin-top: 24px;">
+                        <a href="/?uid={uid}" class="btn btn-primary btn-block" style="font-size: 17px; padding: 16px; margin-top: 24px;">  # noqa: E501
                             Continue to Settings →
                         </a>
                         
@@ -750,7 +758,10 @@ async def process_segments(
     if message_detector.detect_trigger(full_text) and session["message_mode"] == "idle":
         message_content = message_detector.extract_message_content(full_text)
         
-        print(f"🎤 TRIGGER! {'[TEST MODE] Processing immediately...' if is_test_session else 'Starting segment collection...'}", flush=True)
+        print(
+            f"🎤 TRIGGER! {'[TEST MODE] Processing immediately...' if is_test_session else 'Starting segment collection...'}",
+            flush=True
+        )
         print(f"   Content: '{message_content}'", flush=True)
         
         # TEST MODE: Process entire text immediately
@@ -975,7 +986,7 @@ async def test_interface(uid: str = Query("test_user_123"), dev: str = Query(Non
                     </div>
                     <button class="btn btn-primary" onclick="authenticate()">🔐 Authenticate Slack</button>
                     <button class="btn btn-secondary" onclick="checkAuth()">🔍 Check Auth Status</button>
-                    <button class="btn btn-secondary" onclick="logoutUser()" style="border-color: #e01e5a; color: #e01e5a;">🚪 Logout</button>
+                    <button class="btn btn-secondary" onclick="logoutUser()" style="border-color: #e01e5a; color: #e01e5a;">🚪 Logout</button>  # noqa: E501
                     <div id="authStatus" style="margin-top: 10px;"></div>
                 </div>
 
@@ -983,7 +994,7 @@ async def test_interface(uid: str = Query("test_user_123"), dev: str = Query(Non
                     <h2>Test Voice Commands</h2>
                     <div class="input-group">
                         <label>What would you say to OMI:</label>
-                        <textarea id="voiceInput" rows="5" placeholder='Example: "Send Slack message to general saying hello team, hope everyone is doing great today!"'></textarea>
+                        <textarea id="voiceInput" rows="5" placeholder='Example: "Send Slack message to general saying hello team, hope everyone is doing great today!"'></textarea>  # noqa: E501
                     </div>
                     <button class="btn btn-primary" onclick="sendCommand()">🎤 Send Command</button>
                     <button class="btn btn-secondary" onclick="clearLogs()">🗑️ Clear Logs</button>
@@ -1117,7 +1128,7 @@ async def test_interface(uid: str = Query("test_user_123"), dev: str = Query(Non
                 }}
                 
                 function clearLogs() {{
-                    document.getElementById('log').innerHTML = '<div class="log-entry"><span class="timestamp">Cleared</span><span>Logs cleared</span></div>';
+                    document.getElementById('log').innerHTML = '<div class="log-entry"><span class="timestamp">Cleared</span><span>Logs cleared</span></div>';  # noqa: E501
                     setStatus('');
                 }}
                 
@@ -1432,7 +1443,10 @@ async def chat_tool_search_channels(request: Request):
         # Log channel details for debugging
         if matching_channels:
             for ch in matching_channels[:5]:  # Log first 5
-                print(f"   - #{ch['name']} ({'private' if ch.get('is_private') else 'public'}, {'member' if ch.get('is_member') else 'not member'})", flush=True)
+                print(
+                    f"   - #{ch['name']} ({'private' if ch.get('is_private') else 'public'}, "
+                    f"{'member' if ch.get('is_member') else 'not member'})", flush=True
+                )
         
         if not matching_channels:
             query_display = query if query else "all channels"

@@ -56,7 +56,11 @@ async def monitor_session_timeouts():
                     segments_count = session.get("segments_count", 0)
                     accumulated = session.get("accumulated_text", "")
                     
-                    print(f"⏰ TIMEOUT MONITOR: Processing session {session_id} after {idle_time:.1f}s idle ({segments_count} segment(s))", flush=True)
+                    print(
+                        f"⏰ TIMEOUT MONITOR: Processing session {session_id} "
+                        f"after {idle_time:.1f}s idle ({segments_count} segment(s))",
+                        flush=True
+                    )
                     
                     # Get user
                     uid = session.get("uid")
@@ -77,7 +81,8 @@ async def monitor_session_timeouts():
                             
                             # AI extracts task details
                             user_timezone = user.get("timezone", "UTC")
-                            list_id, list_name, task_name, description, priority, due_date, assignee_ids = await task_detector.ai_extract_task_details(
+                            (list_id, list_name, task_name, description, priority,
+                             due_date, assignee_ids) = await task_detector.ai_extract_task_details(
                                 accumulated,
                                 lists,
                                 members,
@@ -294,18 +299,18 @@ async def root(uid: str = Query(None)):
                     </p>
                     
                     <select id="timezoneSelect" class="repo-select">
-                        <option value="America/New_York" {'selected' if user_timezone == 'America/New_York' else ''}>🇺🇸 Eastern (New York)</option>
-                        <option value="America/Chicago" {'selected' if user_timezone == 'America/Chicago' else ''}>🇺🇸 Central (Chicago)</option>
-                        <option value="America/Denver" {'selected' if user_timezone == 'America/Denver' else ''}>🇺🇸 Mountain (Denver)</option>
-                        <option value="America/Los_Angeles" {'selected' if user_timezone == 'America/Los_Angeles' else ''}>🇺🇸 Pacific (Los Angeles)</option>
-                        <option value="Europe/London" {'selected' if user_timezone == 'Europe/London' else ''}>🇬🇧 London (GMT/BST)</option>
-                        <option value="Europe/Paris" {'selected' if user_timezone == 'Europe/Paris' else ''}>🇪🇺 Paris (CET/CEST)</option>
-                        <option value="Europe/Berlin" {'selected' if user_timezone == 'Europe/Berlin' else ''}>🇩🇪 Berlin (CET/CEST)</option>
-                        <option value="Asia/Tokyo" {'selected' if user_timezone == 'Asia/Tokyo' else ''}>🇯🇵 Tokyo (JST)</option>
-                        <option value="Asia/Shanghai" {'selected' if user_timezone == 'Asia/Shanghai' else ''}>🇨🇳 Shanghai (CST)</option>
-                        <option value="Asia/Dubai" {'selected' if user_timezone == 'Asia/Dubai' else ''}>🇦🇪 Dubai (GST)</option>
-                        <option value="Asia/Kolkata" {'selected' if user_timezone == 'Asia/Kolkata' else ''}>🇮🇳 India (IST)</option>
-                        <option value="Australia/Sydney" {'selected' if user_timezone == 'Australia/Sydney' else ''}>🇦🇺 Sydney (AEDT/AEST)</option>
+                        <option value="America/New_York" {'selected' if user_timezone == 'America/New_York' else ''}>🇺🇸 Eastern (New York)</option>  # noqa: E501
+                        <option value="America/Chicago" {'selected' if user_timezone == 'America/Chicago' else ''}>🇺🇸 Central (Chicago)</option>  # noqa: E501
+                        <option value="America/Denver" {'selected' if user_timezone == 'America/Denver' else ''}>🇺🇸 Mountain (Denver)</option>  # noqa: E501
+                        <option value="America/Los_Angeles" {'selected' if user_timezone == 'America/Los_Angeles' else ''}>🇺🇸 Pacific (Los Angeles)</option>  # noqa: E501
+                        <option value="Europe/London" {'selected' if user_timezone == 'Europe/London' else ''}>🇬🇧 London (GMT/BST)</option>  # noqa: E501
+                        <option value="Europe/Paris" {'selected' if user_timezone == 'Europe/Paris' else ''}>🇪🇺 Paris (CET/CEST)</option>  # noqa: E501
+                        <option value="Europe/Berlin" {'selected' if user_timezone == 'Europe/Berlin' else ''}>🇩🇪 Berlin (CET/CEST)</option>  # noqa: E501
+                        <option value="Asia/Tokyo" {'selected' if user_timezone == 'Asia/Tokyo' else ''}>🇯🇵 Tokyo (JST)</option>  # noqa: E501
+                        <option value="Asia/Shanghai" {'selected' if user_timezone == 'Asia/Shanghai' else ''}>🇨🇳 Shanghai (CST)</option>  # noqa: E501
+                        <option value="Asia/Dubai" {'selected' if user_timezone == 'Asia/Dubai' else ''}>🇦🇪 Dubai (GST)</option>  # noqa: E501
+                        <option value="Asia/Kolkata" {'selected' if user_timezone == 'Asia/Kolkata' else ''}>🇮🇳 India (IST)</option>  # noqa: E501
+                        <option value="Australia/Sydney" {'selected' if user_timezone == 'Australia/Sydney' else ''}>🇦🇺 Sydney (AEDT/AEST)</option>  # noqa: E501
                         <option value="UTC" {'selected' if user_timezone == 'UTC' else ''}>🌐 UTC (Universal)</option>
                     </select>
                     
@@ -315,7 +320,7 @@ async def root(uid: str = Query(None)):
                 </div>
                 
                 <div class="card">
-                    <button type="button" class="btn btn-secondary btn-block" onclick="logoutUser()" style="border-color: #7B68EE; color: #7B68EE;">
+                    <button type="button" class="btn btn-secondary btn-block" onclick="logoutUser()" style="border-color: #7B68EE; color: #7B68EE;">  # noqa: E501
                         🚪 Logout & Clear Data
                     </button>
                 </div>
@@ -323,7 +328,7 @@ async def root(uid: str = Query(None)):
                 <div class="card" style="background: rgba(123, 104, 238, 0.05); border-color: #7B68EE;">
                     <h3 style="font-size: 16px;">ℹ️ Reset or Re-authenticate</h3>
                     <p style="text-align: left; font-size: 14px; margin-bottom: 0; color: #9ca0a5;">
-                        Use <strong>"Logout & Clear Data"</strong> to reset your connection and re-authenticate to the same workspace with fresh settings.
+                        Use <strong>"Logout & Clear Data"</strong> to reset your connection and re-authenticate to the same workspace with fresh settings.  # noqa: E501
                     </p>
                 </div>
                 
@@ -593,11 +598,11 @@ async def auth_callback(
                                 Your ClickUp workspace <strong>{team_name}</strong> is now linked
                             </p>
                             <p style="font-size: 16px; margin: 8px 0;">
-                                Found <strong>{len(lists)}</strong> {('list' if len(lists) == 1 else 'lists')} and <strong>{len(members)}</strong> {('member' if len(members) == 1 else 'members')}
+                                Found <strong>{len(lists)}</strong> {('list' if len(lists) == 1 else 'lists')} and <strong>{len(members)}</strong> {('member' if len(members) == 1 else 'members')}  # noqa: E501
                             </p>
                         </div>
                         
-                        <a href="/?uid={uid}" class="btn btn-primary btn-block" style="font-size: 17px; padding: 16px; margin-top: 24px;">
+                        <a href="/?uid={uid}" class="btn btn-primary btn-block" style="font-size: 17px; padding: 16px; margin-top: 24px;">  # noqa: E501
                             Continue to Settings →
                         </a>
                         
@@ -844,7 +849,10 @@ async def process_segments(
     if task_detector.detect_trigger(full_text) and session["task_mode"] == "idle":
         task_content = task_detector.extract_task_content(full_text)
         
-        print(f"🎤 TRIGGER! {'[TEST MODE] Processing immediately...' if is_test_session else 'Starting segment collection...'}", flush=True)
+        print(
+            f"🎤 TRIGGER! {'[TEST MODE] Processing immediately...' if is_test_session else 'Starting segment collection...'}",
+            flush=True
+        )
         print(f"   Content: '{task_content}'", flush=True)
         
         # TEST MODE: Process entire text immediately
@@ -857,7 +865,8 @@ async def process_segments(
             
             # AI extracts task details
             user_timezone = user.get("timezone", "UTC")
-            list_id, list_name, task_name, description, priority, due_date, assignee_ids = await task_detector.ai_extract_task_details(
+            (list_id, list_name, task_name, description, priority,
+                             due_date, assignee_ids) = await task_detector.ai_extract_task_details(
                 task_content, 
                 lists,
                 members,
@@ -958,7 +967,8 @@ async def process_segments(
             
             # AI extracts task details
             user_timezone = user.get("timezone", "UTC")
-            list_id, list_name, task_name, description, priority, due_date, assignee_ids = await task_detector.ai_extract_task_details(
+            (list_id, list_name, task_name, description, priority,
+                             due_date, assignee_ids) = await task_detector.ai_extract_task_details(
                 accumulated,
                 lists,
                 members,
@@ -1075,7 +1085,7 @@ async def test_interface(uid: str = Query("test_user_123"), dev: str = Query(Non
                     </div>
                     <button class="btn btn-primary" onclick="authenticate()">🔐 Authenticate ClickUp</button>
                     <button class="btn btn-secondary" onclick="checkAuth()">🔍 Check Auth Status</button>
-                    <button class="btn btn-secondary" onclick="logoutUser()" style="border-color: #7B68EE; color: #7B68EE;">🚪 Logout</button>
+                    <button class="btn btn-secondary" onclick="logoutUser()" style="border-color: #7B68EE; color: #7B68EE;">🚪 Logout</button>  # noqa: E501
                     <div id="authStatus" style="margin-top: 10px;"></div>
                 </div>
 
@@ -1083,7 +1093,7 @@ async def test_interface(uid: str = Query("test_user_123"), dev: str = Query(Non
                     <h2>Test Voice Commands</h2>
                     <div class="input-group">
                         <label>What would you say to OMI:</label>
-                        <textarea id="voiceInput" rows="5" placeholder='Example: "Create ClickUp task fix login bug in bug tracker high priority"'></textarea>
+                        <textarea id="voiceInput" rows="5" placeholder='Example: "Create ClickUp task fix login bug in bug tracker high priority"'></textarea>  # noqa: E501
                     </div>
                     <button class="btn btn-primary" onclick="sendCommand()">🎤 Send Command</button>
                     <button class="btn btn-secondary" onclick="clearLogs()">🗑️ Clear Logs</button>
@@ -1220,7 +1230,7 @@ async def test_interface(uid: str = Query("test_user_123"), dev: str = Query(Non
                 }}
                 
                 function clearLogs() {{
-                    document.getElementById('log').innerHTML = '<div class="log-entry"><span class="timestamp">Cleared</span><span>Logs cleared</span></div>';
+                    document.getElementById('log').innerHTML = '<div class="log-entry"><span class="timestamp">Cleared</span><span>Logs cleared</span></div>';  # noqa: E501
                     setStatus('');
                 }}
                 
